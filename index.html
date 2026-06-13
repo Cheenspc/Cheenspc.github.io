@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheen's Corner</title>
+  <style>
+    :root {
+      --bg: #FAF8F4;
+      --card: #FFFFFF;
+      --text: #2C2825;
+      --muted: #8C7E74;
+      --accent: #B5673A;
+      --accent-light: #F5E8DF;
+      --border: #EDE6DF;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --radius: 12px;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+    .header-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .blog-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: normal;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    .blog-title span { color: var(--accent); }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-ghost {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+      font-family: var(--font-sans);
+    }
+    .btn-ghost:hover { background: var(--accent-light); color: var(--accent); }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── Views ── */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Home: hero + posts ── */
+    .hero {
+      text-align: center;
+      padding: 48px 0 36px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+    .hero-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 3px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 16px;
+      overflow: hidden;
+    }
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: normal;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .hero p { color: var(--muted); font-size: 1rem; max-width: 400px; margin: 0 auto; }
+
+    /* ── Post cards ── */
+    .posts-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .post-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, transform 0.1s, border-color 0.15s;
+      box-shadow: var(--shadow);
+    }
+    .post-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+    .post-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .post-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: normal;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .post-card-date { font-size: 0.78rem; color: var(--muted); white-space: nowrap; margin-top: 3px; }
+    .post-card-preview { font-size: 0.9rem; color: var(--muted); line-height: 1.55; margin-top: 8px; }
+    .post-card-thumb {
+      width: 64px; height: 64px; min-width: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+    .tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-state p { font-size: 0.95rem; }
+
+    /* ── Single post ── */
+    .post-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      padding: 0;
+    }
+    .post-back:hover { text-decoration: underline; }
+    .post-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .post-full-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: normal;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      letter-spacing: -0.4px;
+    }
+    .post-cover {
+      width: 100%;
+      border-radius: var(--radius);
+      margin-bottom: 28px;
+      max-height: 420px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+    .post-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .post-body p { margin-bottom: 1.2em; }
+    .post-body img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 16px 0;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Admin panel ── */
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .admin-header h2 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: normal;
+    }
+    .admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .admin-tab {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .admin-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .admin-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    /* post list in admin */
+    .admin-post-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .admin-post-row-title { font-size: 0.95rem; }
+    .admin-post-row-date { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+    .admin-post-row-actions { display: flex; gap: 6px; }
+    .btn-sm {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: none;
+      font-family: var(--font-sans);
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-sm.danger:hover { border-color: #E05C5C; color: #E05C5C; }
+
+    /* editor form */
+    .editor-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-input, .form-textarea {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--card);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-textarea { min-height: 240px; resize: vertical; line-height: 1.6; }
+    .form-title-input {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: var(--card);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-title-input:focus { border-color: var(--accent); }
+
+    .photo-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.9rem;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+    .photo-upload-area:hover { border-color: var(--accent); background: var(--accent-light); }
+    .photo-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .photo-preview {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+      max-height: 200px;
+      object-fit: cover;
+      display: none;
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-row { display: flex; gap: 10px; align-items: center; }
+
+    /* password screen */
+    .password-screen {
+      max-width: 360px;
+      margin: 60px auto;
+      text-align: center;
+    }
+    .password-screen h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+    .password-screen p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+    .password-screen .form-input { text-align: center; letter-spacing: 4px; font-size: 1.1rem; margin-bottom: 14px; }
+    .password-error { color: #E05C5C; font-size: 0.85rem; margin-top: 8px; }
+
+    /* settings */
+    .settings-section { margin-bottom: 28px; }
+    .settings-section h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .settings-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+    .settings-row .form-input { flex: 1; min-width: 160px; }
+    .change-password-section { display: flex; flex-direction: column; gap: 10px; }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--text);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      opacity: 0;
+      transition: all 0.25s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* responsive */
+    @media (max-width: 500px) {
+      main { padding: 28px 16px 60px; }
+      .header-inner { padding: 14px 16px; }
+      .hero h1 { font-size: 1.6rem; }
+      .post-full-title { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="blog-title" onclick="showView('home')" href="#">Cheen's <span>Corner</span></a>
+    <div class="header-actions">
+      <button class="btn-ghost" onclick="showView('admin')">✏️ Write</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME VIEW -->
+  <div id="view-home" class="view active">
+    <div class="hero">
+      <div class="hero-avatar" id="hero-avatar">🌿</div>
+      <h1 id="hero-name">Cheen's Corner</h1>
+      <p id="hero-bio">A little slice of my daily life — thoughts, photos, and everything in between.</p>
+    </div>
+    <div class="posts-label">Latest entries</div>
+    <div id="posts-list"></div>
+  </div>
+
+  <!-- SINGLE POST VIEW -->
+  <div id="view-post" class="view">
+    <button class="post-back" onclick="showView('home')">← Back</button>
+    <div id="post-content"></div>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="view-admin" class="view">
+
+    <!-- Password screen -->
+    <div id="admin-password-screen" class="password-screen">
+      <div style="font-size:2rem;margin-bottom:12px">🔑</div>
+      <h2>Private space</h2>
+      <p>Enter your password to access the editor.</p>
+      <input type="password" id="password-input" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()" />
+      <br/>
+      <button class="btn-primary" onclick="checkPassword()">Enter</button>
+      <div class="password-error" id="password-error"></div>
+    </div>
+
+    <!-- Admin panel -->
+    <div id="admin-panel" style="display:none">
+      <div class="admin-header">
+        <h2>Your Journal</h2>
+        <button class="btn-ghost" onclick="lockAdmin()">Lock 🔒</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('write', this)">Write New</button>
+        <button class="admin-tab" onclick="switchAdminTab('posts', this)">All Posts</button>
+        <button class="admin-tab" onclick="switchAdminTab('settings', this)">Settings</button>
+      </div>
+
+      <!-- Write tab -->
+      <div id="admin-tab-write" class="admin-tab-content">
+        <div class="editor-form">
+          <div class="form-group">
+            <input type="text" id="post-title" class="form-title-input" placeholder="Give this entry a title…" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" id="post-date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tag (optional)</label>
+            <input type="text" id="post-tag" class="form-input" placeholder="e.g. travel, food, thoughts…" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cover photo (optional)</label>
+            <div class="photo-upload-area" onclick="document.getElementById('photo-input').click()">
+              <div id="photo-upload-hint">📷 Click to choose a photo</div>
+              <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(this)" />
+              <img id="photo-preview" class="photo-preview" />
+            </div>
+            <button class="btn-sm danger" style="margin-top:6px;display:none" id="remove-photo-btn" onclick="removePhoto()">Remove photo</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Write your entry</label>
+            <textarea id="post-body" class="form-textarea" placeholder="What's on your mind today?&#10;&#10;You can write multiple paragraphs — just press Enter between them."></textarea>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="publishPost()">Publish entry</button>
+            <button class="btn-ghost" id="cancel-edit-btn" style="display:none" onclick="cancelEdit()">Cancel edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts tab -->
+      <div id="admin-tab-posts" class="admin-tab-content" style="display:none">
+        <div id="admin-posts-list"></div>
+      </div>
+
+      <!-- Settings tab -->
+      <div id="admin-tab-settings" class="admin-tab-content" style="display:none">
+        <div class="settings-section">
+          <h3>Blog Identity</h3>
+          <div class="form-group">
+            <label class="form-label">Blog name</label>
+            <div class="settings-row">
+              <input type="text" id="setting-blog-name" class="form-input" placeholder="Cheen's Corner" />
+              <button class="btn-primary" onclick="saveBlogName()">Save</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:14px">
+            <label class="form-label">Short bio</label>
+            <div class="settings-row">
+              <input type="text" id="setting-bio" class="form-input" placeholder="A line about yourself…" />
+              <button class="btn-primary" onclick="saveBio()">Save</button>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:14px">
+            <label class="form-label">Profile photo</label>
+            <div class="settings-row">
+              <div class="photo-upload-area" style="flex:1;padding:14px" onclick="document.getElementById('avatar-input').click()">
+                <span id="avatar-upload-hint">📷 Click to upload avatar</span>
+                <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarSelect(this)" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Change Password</h3>
+          <div class="change-password-section">
+            <input type="password" id="setting-new-pass" class="form-input" placeholder="New password" />
+            <input type="password" id="setting-confirm-pass" class="form-input" placeholder="Confirm password" />
+            <button class="btn-primary" onclick="changePassword()" style="align-self:flex-start">Update password</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Storage helpers ──
+const POSTS_KEY = 'cheen_posts';
+const PASS_KEY  = 'cheen_password';
+const BLOG_KEY  = 'cheen_settings';
+
+function getPosts() {
+  try { return JSON.parse(localStorage.getItem(POSTS_KEY)) || []; } catch { return []; }
+}
+function savePosts(posts) { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); }
+function getPassword() { return localStorage.getItem(PASS_KEY) || 'hello123'; }
+function getSettings() {
+  try { return JSON.parse(localStorage.getItem(BLOG_KEY)) || {}; } catch { return {}; }
+}
+function saveSettings(s) { localStorage.setItem(BLOG_KEY, JSON.stringify(s)); }
+
+// ── Views ──
+let adminUnlocked = false;
+let editingId = null;
+let currentPhotoData = null;
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (name === 'home') renderHome();
+  if (name === 'admin') renderAdmin();
+  window.scrollTo(0, 0);
+}
+
+// ── Home ──
+function renderHome() {
+  const settings = getSettings();
+  document.getElementById('hero-name').textContent = settings.blogName || "Cheen's Corner";
+  document.getElementById('hero-bio').textContent = settings.bio || 'A little slice of my daily life — thoughts, photos, and everything in between.';
+  document.querySelector('.blog-title').innerHTML = (settings.blogName || "Cheen's <span>Corner</span>").replace("'s ", "'s <span>").replace(/(<span>)([^<]*)$/, "$1$2</span>");
+  const titleEl = document.querySelector('.blog-title');
+  const name = settings.blogName || "Cheen's Corner";
+  if (name.includes("'s ")) {
+    const parts = name.split("'s ");
+    titleEl.innerHTML = parts[0] + "'s <span>" + parts.slice(1).join("'s ") + "</span>";
+  } else {
+    titleEl.textContent = name;
+  }
+
+  const avatar = document.getElementById('hero-avatar');
+  if (settings.avatar) {
+    avatar.innerHTML = `<img src="${settings.avatar}" alt="avatar" />`;
+  } else {
+    avatar.textContent = '🌿';
+  }
+
+  const posts = getPosts().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const list = document.getElementById('posts-list');
+  if (posts.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📝</div><p>No entries yet. Click <strong>Write</strong> to publish your first one!</p></div>`;
+    return;
+  }
+  list.innerHTML = posts.map(p => {
+    const preview = p.body ? p.body.slice(0, 120).replace(/\n/g, ' ') + (p.body.length > 120 ? '…' : '') : '';
+    const thumb = p.photo ? `<img class="post-card-thumb" src="${p.photo}" alt="" />` : '';
+    const tag = p.tag ? `<span class="tag">${escHtml(p.tag)}</span>` : '';
+    return `
+      <div class="post-card" onclick="openPost('${p.id}')">
+        <div class="post-card-header">
+          <div>
+            <div class="post-card-title">${escHtml(p.title)}</div>
+            <div class="post-card-date">${formatDate(p.date)}</div>
+          </div>
+          ${thumb}
+        </div>
+        ${preview ? `<div class="post-card-preview">${escHtml(preview)}</div>` : ''}
+        ${tag}
+      </div>`;
+  }).join('');
+}
+
+function openPost(id) {
+  const posts = getPosts();
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+  const cover = post.photo ? `<img class="post-cover" src="${post.photo}" alt="${escHtml(post.title)}" />` : '';
+  const tag = post.tag ? `<span class="tag">${escHtml(post.tag)}</span> · ` : '';
+  const body = post.body ? post.body.split('\n\n').map(para => `<p>${escHtml(para).replace(/\n/g,'<br/>')}</p>`).join('') : '';
+  document.getElementById('post-content').innerHTML = `
+    <div class="post-meta">${tag}${formatDate(post.date)}</div>
+    <h1 class="post-full-title">${escHtml(post.title)}</h1>
+    ${cover}
+    <div class="post-body">${body}</div>
+  `;
+  showView('post');
+}
+
+// ── Admin ──
+function renderAdmin() {
+  if (!adminUnlocked) {
+    document.getElementById('admin-password-screen').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-error').textContent = '';
+    setTimeout(() => document.getElementById('password-input').focus(), 100);
+  } else {
+    document.getElementById('admin-password-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderAdminPosts();
+    loadSettings();
+    // set today's date as default
+    if (!editingId) document.getElementById('post-date').value = new Date().toISOString().slice(0,10);
+  }
+}
+
+function checkPassword() {
+  const val = document.getElementById('password-input').value;
+  if (val === getPassword()) {
+    adminUnlocked = true;
+    renderAdmin();
+  } else {
+    document.getElementById('password-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').focus();
+  }
+}
+
+function lockAdmin() {
+  adminUnlocked = false;
+  showView('home');
+}
+
+function switchAdminTab(name, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
+  document.getElementById('admin-tab-' + name).style.display = 'block';
+  if (name === 'posts') renderAdminPosts();
+}
+
+function renderAdminPosts() {
+  const posts = getPosts().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const el = document.getElementById('admin-posts-list');
+  if (posts.length === 0) {
+    el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:40px">No posts yet.</div>`;
+    return;
+  }
+  el.innerHTML = posts.map(p => `
+    <div class="admin-post-row">
+      <div>
+        <div class="admin-post-row-title">${escHtml(p.title)}</div>
+        <div class="admin-post-row-date">${formatDate(p.date)}</div>
+      </div>
+      <div class="admin-post-row-actions">
+        <button class="btn-sm" onclick="editPost('${p.id}')">Edit</button>
+        <button class="btn-sm danger" onclick="deletePost('${p.id}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+function publishPost() {
+  const title = document.getElementById('post-title').value.trim();
+  const date = document.getElementById('post-date').value;
+  const body = document.getElementById('post-body').value.trim();
+  const tag = document.getElementById('post-tag').value.trim();
+  if (!title) { toast('Please add a title'); return; }
+  if (!date) { toast('Please pick a date'); return; }
+
+  const posts = getPosts();
+  if (editingId) {
+    const idx = posts.findIndex(p => p.id === editingId);
+    if (idx > -1) {
+      posts[idx] = { ...posts[idx], title, date, body, tag, photo: currentPhotoData !== undefined ? currentPhotoData : posts[idx].photo };
+    }
+    editingId = null;
+  } else {
+    posts.push({ id: Date.now().toString(), title, date, body, tag, photo: currentPhotoData || null });
+  }
+  savePosts(posts);
+  clearEditor();
+  toast('Entry published! 🎉');
+  renderAdminPosts();
+}
+
+function editPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  editingId = id;
+  currentPhotoData = post.photo || null;
+  document.getElementById('post-title').value = post.title;
+  document.getElementById('post-date').value = post.date;
+  document.getElementById('post-tag').value = post.tag || '';
+  document.getElementById('post-body').value = post.body || '';
+  if (post.photo) {
+    document.getElementById('photo-preview').src = post.photo;
+    document.getElementById('photo-preview').style.display = 'block';
+    document.getElementById('photo-upload-hint').textContent = '📷 Photo attached';
+    document.getElementById('remove-photo-btn').style.display = 'inline-block';
+  }
+  document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+  switchAdminTab('write', document.querySelectorAll('.admin-tab')[0]);
+  toast('Editing post…');
+}
+
+function cancelEdit() {
+  editingId = null;
+  clearEditor();
+}
+
+function deletePost(id) {
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  renderAdminPosts();
+  toast('Entry deleted.');
+}
+
+function clearEditor() {
+  editingId = null;
+  currentPhotoData = null;
+  document.getElementById('post-title').value = '';
+  document.getElementById('post-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('post-tag').value = '';
+  document.getElementById('post-body').value = '';
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-preview').src = '';
+  document.getElementById('photo-upload-hint').textContent = '📷 Click to choose a photo';
+  document.getElementById('remove-photo-btn').style.display = 'none';
+  document.getElementById('cancel-edit-btn').style.display = 'none';
+}
+
+// ── Photo ──
+function handlePhotoSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    currentPhotoData = e.target.result;
+    document.getElementById('photo-preview').src = currentPhotoData;
+    document.getElementById('photo-preview').style.display = 'block';
+    document.getElementById('photo-upload-hint').textContent = '📷 Photo ready';
+    document.getElementById('remove-photo-btn').style.display = 'inline-block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  currentPhotoData = null;
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-preview').src = '';
+  document.getElementById('photo-upload-hint').textContent = '📷 Click to choose a photo';
+  document.getElementById('remove-photo-btn').style.display = 'none';
+  document.getElementById('photo-input').value = '';
+}
+
+function handleAvatarSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const settings = getSettings();
+    settings.avatar = e.target.result;
+    saveSettings(settings);
+    document.getElementById('avatar-upload-hint').textContent = '✅ Avatar saved!';
+    toast('Profile photo updated!');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Settings ──
+function loadSettings() {
+  const s = getSettings();
+  document.getElementById('setting-blog-name').value = s.blogName || '';
+  document.getElementById('setting-bio').value = s.bio || '';
+}
+
+function saveBlogName() {
+  const s = getSettings();
+  s.blogName = document.getElementById('setting-blog-name').value.trim() || "Cheen's Corner";
+  saveSettings(s);
+  document.title = s.blogName;
+  toast('Blog name saved!');
+}
+
+function saveBio() {
+  const s = getSettings();
+  s.bio = document.getElementById('setting-bio').value.trim();
+  saveSettings(s);
+  toast('Bio saved!');
+}
+
+function changePassword() {
+  const p1 = document.getElementById('setting-new-pass').value;
+  const p2 = document.getElementById('setting-confirm-pass').value;
+  if (!p1) { toast('Password cannot be empty'); return; }
+  if (p1 !== p2) { toast('Passwords do not match'); return; }
+  localStorage.setItem(PASS_KEY, p1);
+  document.getElementById('setting-new-pass').value = '';
+  document.getElementById('setting-confirm-pass').value = '';
+  toast('Password updated! 🔐');
+}
+
+// ── Utils ──
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+// ── Init ──
+renderHome();
+</script>
+</body>
+</html>
