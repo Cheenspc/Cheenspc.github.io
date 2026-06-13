@@ -6,15 +6,9 @@
   <title>Cheen's Corner</title>
   <style>
     :root {
-      --bg: #FAF8F4;
-      --card: #FFFFFF;
-      --text: #2C2825;
-      --muted: #8C7E74;
-      --accent: #B5673A;
-      --accent-light: #F5E8DF;
-      --border: #EDE6DF;
-      --shadow: 0 2px 12px rgba(0,0,0,0.06);
-      --radius: 12px;
+      --bg: #FAF8F4; --card: #FFFFFF; --text: #2C2825; --muted: #8C7E74;
+      --accent: #B5673A; --accent-light: #F5E8DF; --border: #EDE6DF;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06); --radius: 12px;
       --font-serif: Georgia, 'Times New Roman', serif;
       --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
@@ -50,24 +44,51 @@
     .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
     .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
 
-    .post-back { display: flex; align-items: center; gap: 6px; color: var(--accent); cursor: pointer; font-size: 0.88rem; margin-bottom: 32px; background: none; border: none; font-family: var(--font-sans); padding: 0; }
+    /* Post view */
+    .post-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 10px; }
+    .post-back { display: flex; align-items: center; gap: 6px; color: var(--accent); cursor: pointer; font-size: 0.88rem; background: none; border: none; font-family: var(--font-sans); padding: 0; }
     .post-back:hover { text-decoration: underline; }
+    .post-admin-actions { display: flex; gap: 8px; }
     .post-meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; }
     .post-full-title { font-family: var(--font-serif); font-size: 2rem; font-weight: normal; line-height: 1.3; margin-bottom: 20px; }
     .post-cover { width: 100%; border-radius: var(--radius); margin-bottom: 28px; max-height: 420px; object-fit: cover; border: 1px solid var(--border); }
     .post-body { font-size: 1.05rem; line-height: 1.8; }
     .post-body p { margin-bottom: 1.2em; }
 
+    /* Comments */
+    .comments-section { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .comments-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: normal; margin-bottom: 20px; }
+    .comment-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+    .comment-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .comment-name { font-weight: 600; font-size: 0.9rem; }
+    .comment-date { font-size: 0.75rem; color: var(--muted); }
+    .comment-text { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
+    .comment-delete { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 0.78rem; padding: 2px 6px; border-radius: 4px; transition: color 0.15s; display: none; }
+    .comment-delete:hover { color: #E05C5C; }
+    .admin-active .comment-delete { display: inline-block; }
+    .no-comments { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 20px; }
+    .comment-form { margin-top: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .comment-form h4 { font-size: 0.88rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
+    .comment-form input, .comment-form textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 0.92rem; color: var(--text); background: var(--bg); outline: none; transition: border-color 0.15s; margin-bottom: 10px; }
+    .comment-form input:focus, .comment-form textarea:focus { border-color: var(--accent); }
+    .comment-form textarea { min-height: 90px; resize: vertical; }
+    .comment-submit { background: var(--accent); color: white; border: none; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-family: var(--font-sans); font-size: 0.88rem; font-weight: 500; transition: opacity 0.15s; }
+    .comment-submit:hover:not(:disabled) { opacity: 0.85; }
+    .comment-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .comments-loading { color: var(--muted); font-size: 0.88rem; text-align: center; padding: 12px; }
+    .no-comments-token { background: var(--accent-light); border: 1px solid var(--accent); border-radius: 8px; padding: 12px 16px; font-size: 0.85rem; color: var(--text); margin-top: 12px; }
+
+    /* Admin */
     .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
     .admin-header h2 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: normal; }
-    .admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
     .admin-tab { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: none; cursor: pointer; font-family: var(--font-sans); font-size: 0.88rem; color: var(--muted); transition: all 0.15s; }
     .admin-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
     .admin-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-    .admin-post-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
+    .admin-post-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; gap: 10px; }
     .admin-post-row-title { font-size: 0.95rem; }
     .admin-post-row-date { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-    .admin-post-row-actions { display: flex; gap: 6px; }
+    .admin-post-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border); background: none; font-family: var(--font-sans); transition: all 0.15s; }
     .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
     .btn-sm.danger:hover { border-color: #E05C5C; color: #E05C5C; }
@@ -139,8 +160,14 @@
 
   <!-- SINGLE POST -->
   <div id="view-post" class="view">
-    <button class="post-back" onclick="showView('home')">← Back</button>
+    <div class="post-nav">
+      <button class="post-back" onclick="showView('home')">← Back</button>
+      <div class="post-admin-actions" id="post-admin-actions" style="display:none">
+        <button class="btn-sm" id="edit-post-btn" onclick="editCurrentPost()">✏️ Edit post</button>
+      </div>
+    </div>
     <div id="post-content"></div>
+    <div id="comments-section"></div>
   </div>
 
   <!-- ADMIN -->
@@ -168,12 +195,12 @@
       <!-- Write tab -->
       <div id="admin-tab-write" class="admin-tab-content">
         <div id="token-banner" class="token-banner" style="display:none">
-          <p><strong>⚙️ One-time setup needed!</strong> To publish posts so your friends can see them, you need to add a GitHub token in <strong>Settings</strong>.</p>
+          <p><strong>⚙️ One-time setup needed!</strong> To publish posts, add your GitHub token in Settings.</p>
           <ol>
             <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a></li>
-            <li>Name it <em>Cheen's Corner</em>, set expiry to <strong>No expiration</strong></li>
-            <li>Check the <strong>repo</strong> checkbox, then click <strong>Generate token</strong></li>
-            <li>Copy the token (starts with <code>ghp_</code>) and paste it in Settings below</li>
+            <li>Name it <em>Cheen's Corner</em>, expiry = <strong>No expiration</strong></li>
+            <li>Tick <strong>repo</strong>, click <strong>Generate token</strong></li>
+            <li>Paste it in Settings → Admin Token</li>
           </ol>
           <button class="btn-sm" onclick="switchAdminTab('settings', document.querySelectorAll('.admin-tab')[2])">Go to Settings →</button>
         </div>
@@ -218,15 +245,24 @@
       <!-- Settings tab -->
       <div id="admin-tab-settings" class="admin-tab-content" style="display:none">
         <div class="settings-section">
-          <h3>🔑 GitHub Token</h3>
-          <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px">
-            Required to publish posts to your live site. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent)">Create one here</a> with <strong>repo</strong> access ticked. It's stored only on your device.
-          </p>
+          <h3>🔑 Admin Token</h3>
+          <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px">For publishing posts. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent)">Create here</a> with <strong>repo</strong> access.</p>
           <div class="settings-row">
             <input type="password" id="setting-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" />
             <button class="btn-primary" onclick="saveToken()">Save</button>
           </div>
           <div id="token-status" style="font-size:0.82rem;margin-top:8px;color:var(--muted)"></div>
+        </div>
+        <div class="settings-section">
+          <h3>💬 Comments Token</h3>
+          <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px">
+            Lets friends post comments without logging in. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent)">Create a second token</a> — same steps, tick <strong>repo</strong>. This one is stored in your repo so friends can use it.
+          </p>
+          <div class="settings-row">
+            <input type="password" id="setting-comments-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" />
+            <button class="btn-primary" id="save-comments-token-btn" onclick="saveCommentsToken()">Save</button>
+          </div>
+          <div id="comments-token-status" style="font-size:0.82rem;margin-top:8px;color:var(--muted)"></div>
         </div>
         <div class="settings-section">
           <h3>Blog Identity</h3>
@@ -269,11 +305,13 @@
 
 <script>
 // ── Config ──
-const REPO_OWNER = 'Cheenspc';
-const REPO_NAME  = 'Cheenspc.github.io';
-const POSTS_FILE = 'posts.json';
-const GITHUB_API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${POSTS_FILE}`;
-const RAW_URL    = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${POSTS_FILE}`;
+const REPO_OWNER    = 'Cheenspc';
+const REPO_NAME     = 'Cheenspc.github.io';
+const POSTS_FILE    = 'posts.json';
+const COMMENTS_FILE = 'comments.json';
+const CONFIG_FILE   = 'config.json';
+const API_BASE      = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/`;
+const RAW_BASE      = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/`;
 
 // ── Storage ──
 const getToken    = () => localStorage.getItem('cheen_gh_token') || '';
@@ -281,31 +319,30 @@ const getPassword = () => localStorage.getItem('cheen_password') || 'hello123';
 const getSettings = () => { try { return JSON.parse(localStorage.getItem('cheen_settings')) || {}; } catch { return {}; } };
 const saveSettings = s => localStorage.setItem('cheen_settings', JSON.stringify(s));
 
-// ── GitHub API ──
-async function fetchPosts() {
+// ── GitHub helpers ──
+async function ghFetch(file) {
   try {
-    const r = await fetch(RAW_URL + '?t=' + Date.now());
+    const r = await fetch(RAW_BASE + file + '?t=' + Date.now());
     if (r.ok) return await r.json();
   } catch {}
-  return [];
+  return null;
 }
 
-async function savePosts(posts) {
-  const token = getToken();
-  if (!token) throw new Error('GitHub token not set. Go to Settings → GitHub Token.');
-
+async function ghPut(file, data, token, message) {
+  if (!token) throw new Error('No token provided.');
+  const apiUrl = API_BASE + file;
   let sha = null;
-  const metaR = await fetch(GITHUB_API, {
+  const metaR = await fetch(apiUrl, {
     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
   });
-  if (metaR.ok) { sha = (await metaR.json()).sha; }
+  if (metaR.ok) sha = (await metaR.json()).sha;
   else if (metaR.status !== 404) { const e = await metaR.json(); throw new Error(e.message); }
 
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
-  const body = { message: 'Update blog posts', content };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const body = { message, content };
   if (sha) body.sha = sha;
 
-  const r = await fetch(GITHUB_API, {
+  const r = await fetch(apiUrl, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -319,9 +356,26 @@ async function savePosts(posts) {
 
 // ── State ──
 let allPosts = [];
+let allComments = [];
+let commentsToken = '';
 let adminUnlocked = false;
 let editingId = null;
+let currentPostId = null;
 let currentPhotoData = null;
+
+// ── Init ──
+async function initHome() {
+  updateHeroUI();
+  const [posts, comments, config] = await Promise.all([
+    ghFetch(POSTS_FILE),
+    ghFetch(COMMENTS_FILE),
+    ghFetch(CONFIG_FILE)
+  ]);
+  allPosts    = posts    || [];
+  allComments = (comments && comments.items) ? comments.items : [];
+  commentsToken = (config && config.commentsToken) ? config.commentsToken : '';
+  renderPostList();
+}
 
 // ── Views ──
 function showView(name) {
@@ -333,12 +387,6 @@ function showView(name) {
 }
 
 // ── Home ──
-async function initHome() {
-  updateHeroUI();
-  allPosts = await fetchPosts();
-  renderPostList();
-}
-
 function updateHeroUI() {
   const s = getSettings();
   const name = s.blogName || "Cheen's Corner";
@@ -367,9 +415,11 @@ function renderPostList() {
     const preview = p.body ? p.body.slice(0,120).replace(/\n/g,' ') + (p.body.length > 120 ? '…' : '') : '';
     const thumb = p.photo ? `<img class="post-card-thumb" src="${p.photo}" alt="" />` : '';
     const tag = p.tag ? `<span class="tag">${esc(p.tag)}</span>` : '';
+    const commentCount = allComments.filter(c => c.postId === p.id).length;
+    const commentBadge = commentCount > 0 ? `<span style="font-size:0.75rem;color:var(--muted);margin-left:8px">💬 ${commentCount}</span>` : '';
     return `<div class="post-card" onclick="openPost('${p.id}')">
       <div class="post-card-header">
-        <div><div class="post-card-title">${esc(p.title)}</div><div class="post-card-date">${fmtDate(p.date)}</div></div>
+        <div><div class="post-card-title">${esc(p.title)}</div><div class="post-card-date">${fmtDate(p.date)}${commentBadge}</div></div>
         ${thumb}
       </div>
       ${preview ? `<div class="post-card-preview">${esc(preview)}</div>` : ''}
@@ -381,15 +431,112 @@ function renderPostList() {
 function openPost(id) {
   const post = allPosts.find(p => p.id === id);
   if (!post) return;
+  currentPostId = id;
+
   const cover = post.photo ? `<img class="post-cover" src="${post.photo}" />` : '';
   const tag = post.tag ? `<span class="tag">${esc(post.tag)}</span> · ` : '';
   const body = post.body ? post.body.split('\n\n').map(p => `<p>${esc(p).replace(/\n/g,'<br/>')}</p>`).join('') : '';
+
   document.getElementById('post-content').innerHTML = `
     <div class="post-meta">${tag}${fmtDate(post.date)}</div>
     <h1 class="post-full-title">${esc(post.title)}</h1>
     ${cover}
     <div class="post-body">${body}</div>`;
+
+  // Show edit button if admin is unlocked
+  const adminActions = document.getElementById('post-admin-actions');
+  adminActions.style.display = adminUnlocked ? 'flex' : 'none';
+  document.getElementById('edit-post-btn').setAttribute('data-id', id);
+
+  renderComments(id);
   showView('post');
+}
+
+function editCurrentPost() {
+  const id = document.getElementById('edit-post-btn').getAttribute('data-id');
+  if (!id) return;
+  editPost(id);
+  showView('admin');
+  switchAdminTab('write', document.querySelectorAll('.admin-tab')[0]);
+}
+
+// ── Comments ──
+function renderComments(postId) {
+  const section = document.getElementById('comments-section');
+  const postComments = allComments.filter(c => c.postId === postId).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  const adminClass = adminUnlocked ? 'admin-active' : '';
+  const commentItems = postComments.length > 0
+    ? postComments.map(c => `
+      <div class="comment-item ${adminClass}" id="comment-${c.id}">
+        <div class="comment-header">
+          <span class="comment-name">${esc(c.name)}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="comment-date">${fmtDateTime(c.date)}</span>
+            <button class="comment-delete" onclick="deleteComment('${c.id}')">✕ delete</button>
+          </div>
+        </div>
+        <div class="comment-text">${esc(c.text)}</div>
+      </div>`).join('')
+    : `<div class="no-comments">No notes yet — be the first to leave one! 👇</div>`;
+
+  const formOrNotice = commentsToken
+    ? `<div class="comment-form">
+        <h4>Leave a note</h4>
+        <input type="text" id="comment-name-input" placeholder="Your name" maxlength="50" />
+        <textarea id="comment-text-input" placeholder="Write something nice…" maxlength="500"></textarea>
+        <button class="comment-submit" id="comment-submit-btn" onclick="submitComment('${postId}')">Post note</button>
+      </div>`
+    : `<div class="no-comments-token">💬 Comments coming soon — owner is setting them up!</div>`;
+
+  section.innerHTML = `
+    <div class="comments-section">
+      <div class="comments-title">Notes from friends (${postComments.length})</div>
+      <div id="comments-list">${commentItems}</div>
+      ${formOrNotice}
+    </div>`;
+}
+
+async function submitComment(postId) {
+  const nameEl = document.getElementById('comment-name-input');
+  const textEl = document.getElementById('comment-text-input');
+  const btn    = document.getElementById('comment-submit-btn');
+  const name   = nameEl.value.trim();
+  const text   = textEl.value.trim();
+
+  if (!name) { toast('Please enter your name', true); return; }
+  if (!text) { toast('Please write something first', true); return; }
+  if (!commentsToken) { toast('Comments not set up yet', true); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Posting…';
+
+  try {
+    const newComment = { id: Date.now().toString(), postId, name, text, date: new Date().toISOString() };
+    const updated = { items: [...allComments, newComment] };
+    await ghPut(COMMENTS_FILE, updated, commentsToken, 'Add comment');
+    allComments = updated.items;
+    nameEl.value = '';
+    textEl.value = '';
+    renderComments(postId);
+    renderPostList();
+    toast('Note posted! 🎉');
+  } catch(e) { toast(e.message, true); }
+
+  btn.disabled = false;
+  btn.textContent = 'Post note';
+}
+
+async function deleteComment(commentId) {
+  if (!confirm('Delete this comment?')) return;
+  try {
+    const updated = { items: allComments.filter(c => c.id !== commentId) };
+    await ghPut(COMMENTS_FILE, updated, getToken(), 'Delete comment');
+    allComments = updated.items;
+    renderComments(currentPostId);
+    renderPostList();
+    toast('Comment deleted.');
+  } catch(e) { toast(e.message, true); }
 }
 
 // ── Admin ──
@@ -435,14 +582,19 @@ function renderAdminPosts() {
   const sorted = [...allPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
   const el = document.getElementById('admin-posts-list');
   if (sorted.length === 0) { el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:40px">No posts yet.</div>`; return; }
-  el.innerHTML = sorted.map(p => `
-    <div class="admin-post-row">
-      <div><div class="admin-post-row-title">${esc(p.title)}</div><div class="admin-post-row-date">${fmtDate(p.date)}</div></div>
+  el.innerHTML = sorted.map(p => {
+    const commentCount = allComments.filter(c => c.postId === p.id).length;
+    return `<div class="admin-post-row">
+      <div style="min-width:0">
+        <div class="admin-post-row-title">${esc(p.title)}</div>
+        <div class="admin-post-row-date">${fmtDate(p.date)} · 💬 ${commentCount} note${commentCount !== 1 ? 's' : ''}</div>
+      </div>
       <div class="admin-post-row-actions">
         <button class="btn-sm" onclick="editPost('${p.id}')">Edit</button>
         <button class="btn-sm danger" onclick="deletePost('${p.id}')">Delete</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 async function publishPost() {
@@ -452,7 +604,6 @@ async function publishPost() {
   const tag   = document.getElementById('post-tag').value.trim();
   if (!title) { toast('Please add a title', true); return; }
   if (!date)  { toast('Please pick a date', true); return; }
-
   setPublishing(true, 'Saving to GitHub…');
   try {
     const posts = [...allPosts];
@@ -463,12 +614,12 @@ async function publishPost() {
     } else {
       posts.push({ id: Date.now().toString(), title, date, body, tag, photo: currentPhotoData || null });
     }
-    await savePosts(posts);
+    await ghPut(POSTS_FILE, posts, getToken(), 'Update posts');
     allPosts = posts;
     clearEditor();
     renderPostList();
     renderAdminPosts();
-    toast('Published! 🎉 Live in ~30 seconds at cheenspc.github.io');
+    toast('Published! 🎉 Live in ~30 seconds');
   } catch(e) { toast(e.message, true); }
   setPublishing(false, '');
 }
@@ -495,17 +646,16 @@ function editPost(id) {
     document.getElementById('remove-photo-btn').style.display = 'inline-block';
   }
   document.getElementById('cancel-edit-btn').style.display = 'inline-block';
-  switchAdminTab('write', document.querySelectorAll('.admin-tab')[0]);
 }
 
 function cancelEdit() { editingId = null; clearEditor(); }
 
 async function deletePost(id) {
-  if (!confirm('Delete this entry? This will remove it from your live site.')) return;
+  if (!confirm('Delete this entry? This also removes it from your live site.')) return;
   setPublishing(true, 'Deleting…');
   try {
     const posts = allPosts.filter(p => p.id !== id);
-    await savePosts(posts);
+    await ghPut(POSTS_FILE, posts, getToken(), 'Delete post');
     allPosts = posts;
     renderAdminPosts(); renderPostList();
     toast('Entry deleted.');
@@ -536,7 +686,6 @@ function handlePhotoSelect(input) {
     document.getElementById('remove-photo-btn').style.display = 'inline-block';
   });
 }
-
 function removePhoto() {
   currentPhotoData = null;
   document.getElementById('photo-preview').style.display = 'none';
@@ -545,7 +694,6 @@ function removePhoto() {
   document.getElementById('remove-photo-btn').style.display = 'none';
   document.getElementById('photo-input').value = '';
 }
-
 function compressImage(file, maxW = 1200, quality = 0.82) {
   return new Promise(resolve => {
     const img = new Image(), url = URL.createObjectURL(file);
@@ -560,7 +708,6 @@ function compressImage(file, maxW = 1200, quality = 0.82) {
     img.src = url;
   });
 }
-
 function handleAvatarSelect(input) {
   const file = input.files[0]; if (!file) return;
   compressImage(file, 300, 0.85).then(data => {
@@ -576,10 +723,10 @@ function loadSettingsUI() {
   document.getElementById('setting-blog-name').value = s.blogName || '';
   document.getElementById('setting-bio').value = s.bio || '';
   const token = getToken();
-  document.getElementById('token-status').textContent = token
-    ? '✅ Token saved — ' + token.slice(0,8) + '…'
-    : '⚠️ No token set yet.';
+  document.getElementById('token-status').textContent = token ? '✅ Token saved — ' + token.slice(0,8) + '…' : '⚠️ No token set yet.';
   document.getElementById('setting-token').value = '';
+  document.getElementById('comments-token-status').textContent = commentsToken ? '✅ Comments token active' : '⚠️ Not set — friends cannot comment yet.';
+  document.getElementById('setting-comments-token').value = '';
 }
 
 function saveToken() {
@@ -589,7 +736,23 @@ function saveToken() {
   document.getElementById('token-status').textContent = '✅ Token saved — ' + t.slice(0,8) + '…';
   document.getElementById('setting-token').value = '';
   document.getElementById('token-banner').style.display = 'none';
-  toast('Token saved! You can now publish posts 🎉');
+  toast('Admin token saved! 🎉');
+}
+
+async function saveCommentsToken() {
+  const t = document.getElementById('setting-comments-token').value.trim();
+  if (!t) { toast('Paste your comments token first', true); return; }
+  const btn = document.getElementById('save-comments-token-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const config = { commentsToken: t };
+    await ghPut(CONFIG_FILE, config, getToken(), 'Update config');
+    commentsToken = t;
+    document.getElementById('comments-token-status').textContent = '✅ Comments token active';
+    document.getElementById('setting-comments-token').value = '';
+    toast('Comments enabled! Friends can now leave notes 💬');
+  } catch(e) { toast(e.message, true); }
+  btn.disabled = false; btn.textContent = 'Save';
 }
 
 function saveBlogName() {
@@ -597,13 +760,11 @@ function saveBlogName() {
   s.blogName = document.getElementById('setting-blog-name').value.trim() || "Cheen's Corner";
   saveSettings(s); updateHeroUI(); toast('Blog name saved!');
 }
-
 function saveBio() {
   const s = getSettings();
   s.bio = document.getElementById('setting-bio').value.trim();
   saveSettings(s); updateHeroUI(); toast('Bio saved!');
 }
-
 function changePassword() {
   const p1 = document.getElementById('setting-new-pass').value;
   const p2 = document.getElementById('setting-confirm-pass').value;
@@ -619,6 +780,7 @@ function changePassword() {
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const todayStr = () => new Date().toISOString().slice(0,10);
 const fmtDate = d => d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '';
+const fmtDateTime = d => d ? new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
 
 let toastTimer;
 function toast(msg, isError) {
@@ -630,7 +792,7 @@ function toast(msg, isError) {
   toastTimer = setTimeout(() => el.classList.remove('show'), isError ? 4500 : 3000);
 }
 
-// ── Init ──
+// ── Boot ──
 initHome();
 </script>
 </body>
