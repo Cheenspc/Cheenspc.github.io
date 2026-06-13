@@ -619,6 +619,7 @@ function editPost(id) {
     document.getElementById('remove-photo-btn').style.display = 'inline-block';
   }
   document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+  switchAdminTab('write', document.querySelectorAll('.admin-tab')[0]);
 }
 
 function cancelEdit() { editingId = null; clearEditor(); }
