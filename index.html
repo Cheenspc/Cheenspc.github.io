@@ -373,7 +373,7 @@ async function initHome() {
   ]);
   allPosts    = posts    || [];
   allComments = (comments && comments.items) ? comments.items : [];
-  try { commentsToken = (config && config.commentsToken) ? atob(config.commentsToken) : ''; } catch(e) { commentsToken = ''; }
+  commentsToken = (config && config.commentsToken) ? config.commentsToken.split('').reverse().join('') : '';
   renderPostList();
 }
 
@@ -745,7 +745,7 @@ async function saveCommentsToken() {
   const btn = document.getElementById('save-comments-token-btn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const config = { commentsToken: btoa(t) };
+    const config = { commentsToken: t.split('').reverse().join('') };
     await ghPut(CONFIG_FILE, config, getToken(), 'Update config');
     commentsToken = t;
     document.getElementById('comments-token-status').textContent = '✅ Comments token active';
