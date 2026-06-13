@@ -18,385 +18,101 @@
       --font-serif: Georgia, 'Times New Roman', serif;
       --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-sans); line-height: 1.6; min-height: 100vh; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* ── Header ── */
-    header {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(8px);
-    }
-    .header-inner {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .blog-title {
-      font-family: var(--font-serif);
-      font-size: 1.4rem;
-      font-weight: normal;
-      color: var(--text);
-      cursor: pointer;
-      text-decoration: none;
-      letter-spacing: -0.3px;
-    }
+    header { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 700px; margin: 0 auto; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .blog-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: normal; color: var(--text); cursor: pointer; text-decoration: none; }
     .blog-title span { color: var(--accent); }
-    .header-actions { display: flex; gap: 12px; align-items: center; }
-    .btn-ghost {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 0.85rem;
-      padding: 6px 10px;
-      border-radius: 6px;
-      transition: background 0.15s, color 0.15s;
-      font-family: var(--font-sans);
-    }
+    .btn-ghost { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; transition: background 0.15s, color 0.15s; font-family: var(--font-sans); }
     .btn-ghost:hover { background: var(--accent-light); color: var(--accent); }
 
-    /* ── Main layout ── */
-    main {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    /* ── Views ── */
+    main { max-width: 700px; margin: 0 auto; padding: 40px 24px 80px; }
     .view { display: none; }
     .view.active { display: block; }
 
-    /* ── Home: hero + posts ── */
-    .hero {
-      text-align: center;
-      padding: 48px 0 36px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 36px;
-    }
-    .hero-avatar {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: var(--accent-light);
-      border: 3px solid var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      margin: 0 auto 16px;
-      overflow: hidden;
-    }
+    .hero { text-align: center; padding: 48px 0 36px; border-bottom: 1px solid var(--border); margin-bottom: 36px; }
+    .hero-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--accent-light); border: 3px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px; overflow: hidden; }
     .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .hero h1 {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      font-weight: normal;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
+    .hero h1 { font-family: var(--font-serif); font-size: 2rem; font-weight: normal; margin-bottom: 8px; }
     .hero p { color: var(--muted); font-size: 1rem; max-width: 400px; margin: 0 auto; }
 
-    /* ── Post cards ── */
-    .posts-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .post-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      transition: box-shadow 0.15s, transform 0.1s, border-color 0.15s;
-      box-shadow: var(--shadow);
-    }
-    .post-card:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.09);
-      transform: translateY(-1px);
-      border-color: var(--accent);
-    }
+    .posts-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 16px; }
+    .post-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px; cursor: pointer; transition: box-shadow 0.15s, transform 0.1s, border-color 0.15s; box-shadow: var(--shadow); }
+    .post-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.09); transform: translateY(-1px); border-color: var(--accent); }
     .post-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .post-card-title {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: normal;
-      line-height: 1.4;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
+    .post-card-title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: normal; line-height: 1.4; margin-bottom: 6px; }
     .post-card-date { font-size: 0.78rem; color: var(--muted); white-space: nowrap; margin-top: 3px; }
     .post-card-preview { font-size: 0.9rem; color: var(--muted); line-height: 1.55; margin-top: 8px; }
-    .post-card-thumb {
-      width: 64px; height: 64px; min-width: 64px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-    }
-    .tag {
-      display: inline-block;
-      background: var(--accent-light);
-      color: var(--accent);
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 20px;
-      margin-top: 10px;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 64px 24px;
-      color: var(--muted);
-    }
+    .post-card-thumb { width: 64px; height: 64px; min-width: 64px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+    .tag { display: inline-block; background: var(--accent-light); color: var(--accent); font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-top: 10px; }
+    .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
     .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
-    .empty-state p { font-size: 0.95rem; }
 
-    /* ── Single post ── */
-    .post-back {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--accent);
-      cursor: pointer;
-      font-size: 0.88rem;
-      margin-bottom: 32px;
-      background: none;
-      border: none;
-      font-family: var(--font-sans);
-      padding: 0;
-    }
+    .post-back { display: flex; align-items: center; gap: 6px; color: var(--accent); cursor: pointer; font-size: 0.88rem; margin-bottom: 32px; background: none; border: none; font-family: var(--font-sans); padding: 0; }
     .post-back:hover { text-decoration: underline; }
-    .post-meta {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-    .post-full-title {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      font-weight: normal;
-      line-height: 1.3;
-      margin-bottom: 20px;
-      letter-spacing: -0.4px;
-    }
-    .post-cover {
-      width: 100%;
-      border-radius: var(--radius);
-      margin-bottom: 28px;
-      max-height: 420px;
-      object-fit: cover;
-      border: 1px solid var(--border);
-    }
-    .post-body {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--text);
-    }
+    .post-meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; }
+    .post-full-title { font-family: var(--font-serif); font-size: 2rem; font-weight: normal; line-height: 1.3; margin-bottom: 20px; }
+    .post-cover { width: 100%; border-radius: var(--radius); margin-bottom: 28px; max-height: 420px; object-fit: cover; border: 1px solid var(--border); }
+    .post-body { font-size: 1.05rem; line-height: 1.8; }
     .post-body p { margin-bottom: 1.2em; }
-    .post-body img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin: 16px 0;
-      border: 1px solid var(--border);
-    }
 
-    /* ── Admin panel ── */
-    .admin-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-    .admin-header h2 {
-      font-family: var(--font-serif);
-      font-size: 1.4rem;
-      font-weight: normal;
-    }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+    .admin-header h2 { font-family: var(--font-serif); font-size: 1.4rem; font-weight: normal; }
     .admin-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .admin-tab {
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: none;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 0.88rem;
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-    .admin-tab.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+    .admin-tab { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: none; cursor: pointer; font-family: var(--font-sans); font-size: 0.88rem; color: var(--muted); transition: all 0.15s; }
+    .admin-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
     .admin-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-
-    /* post list in admin */
-    .admin-post-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
+    .admin-post-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
     .admin-post-row-title { font-size: 0.95rem; }
     .admin-post-row-date { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
     .admin-post-row-actions { display: flex; gap: 6px; }
-    .btn-sm {
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: none;
-      font-family: var(--font-sans);
-      transition: all 0.15s;
-    }
+    .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border); background: none; font-family: var(--font-sans); transition: all 0.15s; }
     .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
     .btn-sm.danger:hover { border-color: #E05C5C; color: #E05C5C; }
 
-    /* editor form */
     .editor-form { display: flex; flex-direction: column; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-input, .form-textarea {
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      color: var(--text);
-      background: var(--card);
-      transition: border-color 0.15s;
-      outline: none;
-    }
+    .form-input, .form-textarea { border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text); background: var(--card); transition: border-color 0.15s; outline: none; }
     .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
     .form-textarea { min-height: 240px; resize: vertical; line-height: 1.6; }
-    .form-title-input {
-      font-family: var(--font-serif);
-      font-size: 1.3rem;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 14px;
-      color: var(--text);
-      background: var(--card);
-      outline: none;
-      transition: border-color 0.15s;
-    }
+    .form-title-input { font-family: var(--font-serif); font-size: 1.3rem; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); background: var(--card); outline: none; transition: border-color 0.15s; width: 100%; }
     .form-title-input:focus { border-color: var(--accent); }
-
-    .photo-upload-area {
-      border: 2px dashed var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 0.9rem;
-      transition: border-color 0.15s, background 0.15s;
-      position: relative;
-    }
+    .photo-upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; color: var(--muted); font-size: 0.9rem; transition: border-color 0.15s, background 0.15s; }
     .photo-upload-area:hover { border-color: var(--accent); background: var(--accent-light); }
-    .photo-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .photo-preview {
-      width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-      max-height: 200px;
-      object-fit: cover;
-      display: none;
-      border: 1px solid var(--border);
-    }
+    .photo-preview { width: 100%; border-radius: 8px; margin-top: 10px; max-height: 200px; object-fit: cover; display: none; border: 1px solid var(--border); }
+    .btn-primary { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: var(--font-sans); font-size: 0.95rem; font-weight: 500; transition: opacity 0.15s, transform 0.1s; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: opacity 0.15s, transform 0.1s;
-    }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn-row { display: flex; gap: 10px; align-items: center; }
-
-    /* password screen */
-    .password-screen {
-      max-width: 360px;
-      margin: 60px auto;
-      text-align: center;
-    }
-    .password-screen h2 {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: normal;
-      margin-bottom: 8px;
-    }
+    .password-screen { max-width: 360px; margin: 60px auto; text-align: center; }
+    .password-screen h2 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: normal; margin-bottom: 8px; }
     .password-screen p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
-    .password-screen .form-input { text-align: center; letter-spacing: 4px; font-size: 1.1rem; margin-bottom: 14px; }
+    .password-screen .form-input { text-align: center; letter-spacing: 4px; font-size: 1.1rem; margin-bottom: 14px; width: 100%; }
     .password-error { color: #E05C5C; font-size: 0.85rem; margin-top: 8px; }
 
-    /* settings */
     .settings-section { margin-bottom: 28px; }
-    .settings-section h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    .settings-section h3 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 12px; }
     .settings-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
     .settings-row .form-input { flex: 1; min-width: 160px; }
-    .change-password-section { display: flex; flex-direction: column; gap: 10px; }
 
-    /* toast */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--text);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      opacity: 0;
-      transition: all 0.25s;
-      pointer-events: none;
-      z-index: 999;
-    }
+    .token-banner { background: var(--accent-light); border: 1.5px solid var(--accent); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
+    .token-banner p { font-size: 0.9rem; margin-bottom: 10px; }
+    .token-banner a { color: var(--accent); font-weight: 600; }
+    .token-banner ol { font-size: 0.88rem; color: var(--muted); padding-left: 18px; margin-bottom: 12px; line-height: 1.9; }
+
+    .loading-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+    .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-bottom: 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: white; padding: 10px 20px; border-radius: 8px; font-size: 0.88rem; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; max-width: 90vw; text-align: center; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #C0392B; }
 
-    /* responsive */
-    @media (max-width: 500px) {
-      main { padding: 28px 16px 60px; }
-      .header-inner { padding: 14px 16px; }
-      .hero h1 { font-size: 1.6rem; }
-      .post-full-title { font-size: 1.5rem; }
-    }
+    @media (max-width: 500px) { main { padding: 28px 16px 60px; } .hero h1 { font-size: 1.6rem; } }
   </style>
 </head>
 <body>
@@ -404,15 +120,13 @@
 <header>
   <div class="header-inner">
     <a class="blog-title" onclick="showView('home')" href="#">Cheen's <span>Corner</span></a>
-    <div class="header-actions">
-      <button class="btn-ghost" onclick="showView('admin')">✏️ Write</button>
-    </div>
+    <button class="btn-ghost" onclick="showView('admin')">✏️ Write</button>
   </div>
 </header>
 
 <main>
 
-  <!-- HOME VIEW -->
+  <!-- HOME -->
   <div id="view-home" class="view active">
     <div class="hero">
       <div class="hero-avatar" id="hero-avatar">🌿</div>
@@ -420,44 +134,49 @@
       <p id="hero-bio">A little slice of my daily life — thoughts, photos, and everything in between.</p>
     </div>
     <div class="posts-label">Latest entries</div>
-    <div id="posts-list"></div>
+    <div id="posts-list"><div class="loading-state"><div class="spinner"></div><br/>Loading entries…</div></div>
   </div>
 
-  <!-- SINGLE POST VIEW -->
+  <!-- SINGLE POST -->
   <div id="view-post" class="view">
     <button class="post-back" onclick="showView('home')">← Back</button>
     <div id="post-content"></div>
   </div>
 
-  <!-- ADMIN VIEW -->
+  <!-- ADMIN -->
   <div id="view-admin" class="view">
-
-    <!-- Password screen -->
     <div id="admin-password-screen" class="password-screen">
       <div style="font-size:2rem;margin-bottom:12px">🔑</div>
       <h2>Private space</h2>
       <p>Enter your password to access the editor.</p>
       <input type="password" id="password-input" class="form-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()" />
-      <br/>
-      <button class="btn-primary" onclick="checkPassword()">Enter</button>
+      <br/><button class="btn-primary" onclick="checkPassword()">Enter</button>
       <div class="password-error" id="password-error"></div>
     </div>
 
-    <!-- Admin panel -->
     <div id="admin-panel" style="display:none">
       <div class="admin-header">
         <h2>Your Journal</h2>
         <button class="btn-ghost" onclick="lockAdmin()">Lock 🔒</button>
       </div>
-
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('write', this)">Write New</button>
-        <button class="admin-tab" onclick="switchAdminTab('posts', this)">All Posts</button>
-        <button class="admin-tab" onclick="switchAdminTab('settings', this)">Settings</button>
+        <button class="admin-tab active" onclick="switchAdminTab('write',this)">Write New</button>
+        <button class="admin-tab" onclick="switchAdminTab('posts',this)">All Posts</button>
+        <button class="admin-tab" onclick="switchAdminTab('settings',this)">Settings</button>
       </div>
 
       <!-- Write tab -->
       <div id="admin-tab-write" class="admin-tab-content">
+        <div id="token-banner" class="token-banner" style="display:none">
+          <p><strong>⚙️ One-time setup needed!</strong> To publish posts so your friends can see them, you need to add a GitHub token in <strong>Settings</strong>.</p>
+          <ol>
+            <li>Go to <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a></li>
+            <li>Name it <em>Cheen's Corner</em>, set expiry to <strong>No expiration</strong></li>
+            <li>Check the <strong>repo</strong> checkbox, then click <strong>Generate token</strong></li>
+            <li>Copy the token (starts with <code>ghp_</code>) and paste it in Settings below</li>
+          </ol>
+          <button class="btn-sm" onclick="switchAdminTab('settings', document.querySelectorAll('.admin-tab')[2])">Go to Settings →</button>
+        </div>
         <div class="editor-form">
           <div class="form-group">
             <input type="text" id="post-title" class="form-title-input" placeholder="Give this entry a title…" />
@@ -481,11 +200,12 @@
           </div>
           <div class="form-group">
             <label class="form-label">Write your entry</label>
-            <textarea id="post-body" class="form-textarea" placeholder="What's on your mind today?&#10;&#10;You can write multiple paragraphs — just press Enter between them."></textarea>
+            <textarea id="post-body" class="form-textarea" placeholder="What's on your mind today?&#10;&#10;Press Enter twice between paragraphs."></textarea>
           </div>
           <div class="btn-row">
-            <button class="btn-primary" onclick="publishPost()">Publish entry</button>
+            <button class="btn-primary" id="publish-btn" onclick="publishPost()">Publish entry</button>
             <button class="btn-ghost" id="cancel-edit-btn" style="display:none" onclick="cancelEdit()">Cancel edit</button>
+            <span id="publish-status" style="font-size:0.85rem;color:var(--muted)"></span>
           </div>
         </div>
       </div>
@@ -497,6 +217,17 @@
 
       <!-- Settings tab -->
       <div id="admin-tab-settings" class="admin-tab-content" style="display:none">
+        <div class="settings-section">
+          <h3>🔑 GitHub Token</h3>
+          <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px">
+            Required to publish posts to your live site. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent)">Create one here</a> with <strong>repo</strong> access ticked. It's stored only on your device.
+          </p>
+          <div class="settings-row">
+            <input type="password" id="setting-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" />
+            <button class="btn-primary" onclick="saveToken()">Save</button>
+          </div>
+          <div id="token-status" style="font-size:0.82rem;margin-top:8px;color:var(--muted)"></div>
+        </div>
         <div class="settings-section">
           <h3>Blog Identity</h3>
           <div class="form-group">
@@ -515,17 +246,15 @@
           </div>
           <div class="form-group" style="margin-top:14px">
             <label class="form-label">Profile photo</label>
-            <div class="settings-row">
-              <div class="photo-upload-area" style="flex:1;padding:14px" onclick="document.getElementById('avatar-input').click()">
-                <span id="avatar-upload-hint">📷 Click to upload avatar</span>
-                <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarSelect(this)" />
-              </div>
+            <div class="photo-upload-area" style="padding:14px" onclick="document.getElementById('avatar-input').click()">
+              <span id="avatar-upload-hint">📷 Click to upload avatar</span>
+              <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarSelect(this)" />
             </div>
           </div>
         </div>
         <div class="settings-section">
           <h3>Change Password</h3>
-          <div class="change-password-section">
+          <div style="display:flex;flex-direction:column;gap:10px">
             <input type="password" id="setting-new-pass" class="form-input" placeholder="New password" />
             <input type="password" id="setting-confirm-pass" class="form-input" placeholder="Confirm password" />
             <button class="btn-primary" onclick="changePassword()" style="align-self:flex-start">Update password</button>
@@ -536,30 +265,65 @@
   </div>
 
 </main>
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Storage helpers ──
-const POSTS_KEY = 'cheen_posts';
-const PASS_KEY  = 'cheen_password';
-const BLOG_KEY  = 'cheen_settings';
+// ── Config ──
+const REPO_OWNER = 'Cheenspc';
+const REPO_NAME  = 'Cheenspc.github.io';
+const POSTS_FILE = 'posts.json';
+const GITHUB_API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${POSTS_FILE}`;
+const RAW_URL    = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${POSTS_FILE}`;
 
-function getPosts() {
-  try { return JSON.parse(localStorage.getItem(POSTS_KEY)) || []; } catch { return []; }
-}
-function savePosts(posts) { localStorage.setItem(POSTS_KEY, JSON.stringify(posts)); }
-function getPassword() { return localStorage.getItem(PASS_KEY) || 'hello123'; }
-function getSettings() {
-  try { return JSON.parse(localStorage.getItem(BLOG_KEY)) || {}; } catch { return {}; }
-}
-function saveSettings(s) { localStorage.setItem(BLOG_KEY, JSON.stringify(s)); }
+// ── Storage ──
+const getToken    = () => localStorage.getItem('cheen_gh_token') || '';
+const getPassword = () => localStorage.getItem('cheen_password') || 'hello123';
+const getSettings = () => { try { return JSON.parse(localStorage.getItem('cheen_settings')) || {}; } catch { return {}; } };
+const saveSettings = s => localStorage.setItem('cheen_settings', JSON.stringify(s));
 
-// ── Views ──
+// ── GitHub API ──
+async function fetchPosts() {
+  try {
+    const r = await fetch(RAW_URL + '?t=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch {}
+  return [];
+}
+
+async function savePosts(posts) {
+  const token = getToken();
+  if (!token) throw new Error('GitHub token not set. Go to Settings → GitHub Token.');
+
+  let sha = null;
+  const metaR = await fetch(GITHUB_API, {
+    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (metaR.ok) { sha = (await metaR.json()).sha; }
+  else if (metaR.status !== 404) { const e = await metaR.json(); throw new Error(e.message); }
+
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+  const body = { message: 'Update blog posts', content };
+  if (sha) body.sha = sha;
+
+  const r = await fetch(GITHUB_API, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) { const e = await r.json(); throw new Error(e.message || 'GitHub API error'); }
+}
+
+// ── State ──
+let allPosts = [];
 let adminUnlocked = false;
 let editingId = null;
 let currentPhotoData = null;
 
+// ── Views ──
 function showView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
@@ -569,65 +333,62 @@ function showView(name) {
 }
 
 // ── Home ──
-function renderHome() {
-  const settings = getSettings();
-  document.getElementById('hero-name').textContent = settings.blogName || "Cheen's Corner";
-  document.getElementById('hero-bio').textContent = settings.bio || 'A little slice of my daily life — thoughts, photos, and everything in between.';
-  document.querySelector('.blog-title').innerHTML = (settings.blogName || "Cheen's <span>Corner</span>").replace("'s ", "'s <span>").replace(/(<span>)([^<]*)$/, "$1$2</span>");
+async function initHome() {
+  updateHeroUI();
+  allPosts = await fetchPosts();
+  renderPostList();
+}
+
+function updateHeroUI() {
+  const s = getSettings();
+  const name = s.blogName || "Cheen's Corner";
+  document.title = name;
+  document.getElementById('hero-name').textContent = name;
+  document.getElementById('hero-bio').textContent = s.bio || 'A little slice of my daily life — thoughts, photos, and everything in between.';
   const titleEl = document.querySelector('.blog-title');
-  const name = settings.blogName || "Cheen's Corner";
   if (name.includes("'s ")) {
-    const parts = name.split("'s ");
-    titleEl.innerHTML = parts[0] + "'s <span>" + parts.slice(1).join("'s ") + "</span>";
-  } else {
-    titleEl.textContent = name;
-  }
-
+    const [first, ...rest] = name.split("'s ");
+    titleEl.innerHTML = first + "'s <span>" + rest.join("'s ") + "</span>";
+  } else { titleEl.textContent = name; }
   const avatar = document.getElementById('hero-avatar');
-  if (settings.avatar) {
-    avatar.innerHTML = `<img src="${settings.avatar}" alt="avatar" />`;
-  } else {
-    avatar.textContent = '🌿';
-  }
+  if (s.avatar) { avatar.innerHTML = `<img src="${s.avatar}" />`; } else { avatar.textContent = '🌿'; }
+}
 
-  const posts = getPosts().sort((a, b) => new Date(b.date) - new Date(a.date));
-  const list = document.getElementById('posts-list');
-  if (posts.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">📝</div><p>No entries yet. Click <strong>Write</strong> to publish your first one!</p></div>`;
+function renderHome() { updateHeroUI(); renderPostList(); }
+
+function renderPostList() {
+  const sorted = [...allPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const el = document.getElementById('posts-list');
+  if (sorted.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📝</div><p>No entries yet. Click <strong>Write</strong> to publish your first one!</p></div>`;
     return;
   }
-  list.innerHTML = posts.map(p => {
-    const preview = p.body ? p.body.slice(0, 120).replace(/\n/g, ' ') + (p.body.length > 120 ? '…' : '') : '';
+  el.innerHTML = sorted.map(p => {
+    const preview = p.body ? p.body.slice(0,120).replace(/\n/g,' ') + (p.body.length > 120 ? '…' : '') : '';
     const thumb = p.photo ? `<img class="post-card-thumb" src="${p.photo}" alt="" />` : '';
-    const tag = p.tag ? `<span class="tag">${escHtml(p.tag)}</span>` : '';
-    return `
-      <div class="post-card" onclick="openPost('${p.id}')">
-        <div class="post-card-header">
-          <div>
-            <div class="post-card-title">${escHtml(p.title)}</div>
-            <div class="post-card-date">${formatDate(p.date)}</div>
-          </div>
-          ${thumb}
-        </div>
-        ${preview ? `<div class="post-card-preview">${escHtml(preview)}</div>` : ''}
-        ${tag}
-      </div>`;
+    const tag = p.tag ? `<span class="tag">${esc(p.tag)}</span>` : '';
+    return `<div class="post-card" onclick="openPost('${p.id}')">
+      <div class="post-card-header">
+        <div><div class="post-card-title">${esc(p.title)}</div><div class="post-card-date">${fmtDate(p.date)}</div></div>
+        ${thumb}
+      </div>
+      ${preview ? `<div class="post-card-preview">${esc(preview)}</div>` : ''}
+      ${tag}
+    </div>`;
   }).join('');
 }
 
 function openPost(id) {
-  const posts = getPosts();
-  const post = posts.find(p => p.id === id);
+  const post = allPosts.find(p => p.id === id);
   if (!post) return;
-  const cover = post.photo ? `<img class="post-cover" src="${post.photo}" alt="${escHtml(post.title)}" />` : '';
-  const tag = post.tag ? `<span class="tag">${escHtml(post.tag)}</span> · ` : '';
-  const body = post.body ? post.body.split('\n\n').map(para => `<p>${escHtml(para).replace(/\n/g,'<br/>')}</p>`).join('') : '';
+  const cover = post.photo ? `<img class="post-cover" src="${post.photo}" />` : '';
+  const tag = post.tag ? `<span class="tag">${esc(post.tag)}</span> · ` : '';
+  const body = post.body ? post.body.split('\n\n').map(p => `<p>${esc(p).replace(/\n/g,'<br/>')}</p>`).join('') : '';
   document.getElementById('post-content').innerHTML = `
-    <div class="post-meta">${tag}${formatDate(post.date)}</div>
-    <h1 class="post-full-title">${escHtml(post.title)}</h1>
+    <div class="post-meta">${tag}${fmtDate(post.date)}</div>
+    <h1 class="post-full-title">${esc(post.title)}</h1>
     ${cover}
-    <div class="post-body">${body}</div>
-  `;
+    <div class="post-body">${body}</div>`;
   showView('post');
 }
 
@@ -642,29 +403,24 @@ function renderAdmin() {
   } else {
     document.getElementById('admin-password-screen').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
+    if (!editingId) document.getElementById('post-date').value = todayStr();
+    document.getElementById('token-banner').style.display = getToken() ? 'none' : 'block';
     renderAdminPosts();
-    loadSettings();
-    // set today's date as default
-    if (!editingId) document.getElementById('post-date').value = new Date().toISOString().slice(0,10);
+    loadSettingsUI();
   }
 }
 
 function checkPassword() {
-  const val = document.getElementById('password-input').value;
-  if (val === getPassword()) {
-    adminUnlocked = true;
-    renderAdmin();
+  if (document.getElementById('password-input').value === getPassword()) {
+    adminUnlocked = true; renderAdmin();
   } else {
-    document.getElementById('password-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('password-error').textContent = 'Incorrect password.';
     document.getElementById('password-input').value = '';
     document.getElementById('password-input').focus();
   }
 }
 
-function lockAdmin() {
-  adminUnlocked = false;
-  showView('home');
-}
+function lockAdmin() { adminUnlocked = false; showView('home'); }
 
 function switchAdminTab(name, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -672,21 +428,16 @@ function switchAdminTab(name, btn) {
   document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
   document.getElementById('admin-tab-' + name).style.display = 'block';
   if (name === 'posts') renderAdminPosts();
+  if (name === 'settings') loadSettingsUI();
 }
 
 function renderAdminPosts() {
-  const posts = getPosts().sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sorted = [...allPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
   const el = document.getElementById('admin-posts-list');
-  if (posts.length === 0) {
-    el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:40px">No posts yet.</div>`;
-    return;
-  }
-  el.innerHTML = posts.map(p => `
+  if (sorted.length === 0) { el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:40px">No posts yet.</div>`; return; }
+  el.innerHTML = sorted.map(p => `
     <div class="admin-post-row">
-      <div>
-        <div class="admin-post-row-title">${escHtml(p.title)}</div>
-        <div class="admin-post-row-date">${formatDate(p.date)}</div>
-      </div>
+      <div><div class="admin-post-row-title">${esc(p.title)}</div><div class="admin-post-row-date">${fmtDate(p.date)}</div></div>
       <div class="admin-post-row-actions">
         <button class="btn-sm" onclick="editPost('${p.id}')">Edit</button>
         <button class="btn-sm danger" onclick="deletePost('${p.id}')">Delete</button>
@@ -694,35 +445,45 @@ function renderAdminPosts() {
     </div>`).join('');
 }
 
-function publishPost() {
+async function publishPost() {
   const title = document.getElementById('post-title').value.trim();
-  const date = document.getElementById('post-date').value;
-  const body = document.getElementById('post-body').value.trim();
-  const tag = document.getElementById('post-tag').value.trim();
-  if (!title) { toast('Please add a title'); return; }
-  if (!date) { toast('Please pick a date'); return; }
+  const date  = document.getElementById('post-date').value;
+  const body  = document.getElementById('post-body').value.trim();
+  const tag   = document.getElementById('post-tag').value.trim();
+  if (!title) { toast('Please add a title', true); return; }
+  if (!date)  { toast('Please pick a date', true); return; }
 
-  const posts = getPosts();
-  if (editingId) {
-    const idx = posts.findIndex(p => p.id === editingId);
-    if (idx > -1) {
-      posts[idx] = { ...posts[idx], title, date, body, tag, photo: currentPhotoData !== undefined ? currentPhotoData : posts[idx].photo };
+  setPublishing(true, 'Saving to GitHub…');
+  try {
+    const posts = [...allPosts];
+    if (editingId) {
+      const idx = posts.findIndex(p => p.id === editingId);
+      if (idx > -1) posts[idx] = { ...posts[idx], title, date, body, tag, photo: currentPhotoData !== undefined ? currentPhotoData : posts[idx].photo };
+      editingId = null;
+    } else {
+      posts.push({ id: Date.now().toString(), title, date, body, tag, photo: currentPhotoData || null });
     }
-    editingId = null;
-  } else {
-    posts.push({ id: Date.now().toString(), title, date, body, tag, photo: currentPhotoData || null });
-  }
-  savePosts(posts);
-  clearEditor();
-  toast('Entry published! 🎉');
-  renderAdminPosts();
+    await savePosts(posts);
+    allPosts = posts;
+    clearEditor();
+    renderPostList();
+    renderAdminPosts();
+    toast('Published! 🎉 Live in ~30 seconds at cheenspc.github.io');
+  } catch(e) { toast(e.message, true); }
+  setPublishing(false, '');
+}
+
+function setPublishing(on, msg) {
+  const btn = document.getElementById('publish-btn');
+  document.getElementById('publish-status').textContent = msg || '';
+  btn.disabled = on;
+  btn.textContent = on ? 'Publishing…' : 'Publish entry';
 }
 
 function editPost(id) {
-  const post = getPosts().find(p => p.id === id);
+  const post = allPosts.find(p => p.id === id);
   if (!post) return;
-  editingId = id;
-  currentPhotoData = post.photo || null;
+  editingId = id; currentPhotoData = post.photo || null;
   document.getElementById('post-title').value = post.title;
   document.getElementById('post-date').value = post.date;
   document.getElementById('post-tag').value = post.tag || '';
@@ -735,49 +496,45 @@ function editPost(id) {
   }
   document.getElementById('cancel-edit-btn').style.display = 'inline-block';
   switchAdminTab('write', document.querySelectorAll('.admin-tab')[0]);
-  toast('Editing post…');
 }
 
-function cancelEdit() {
-  editingId = null;
-  clearEditor();
-}
+function cancelEdit() { editingId = null; clearEditor(); }
 
-function deletePost(id) {
-  if (!confirm('Delete this entry? This cannot be undone.')) return;
-  const posts = getPosts().filter(p => p.id !== id);
-  savePosts(posts);
-  renderAdminPosts();
-  toast('Entry deleted.');
+async function deletePost(id) {
+  if (!confirm('Delete this entry? This will remove it from your live site.')) return;
+  setPublishing(true, 'Deleting…');
+  try {
+    const posts = allPosts.filter(p => p.id !== id);
+    await savePosts(posts);
+    allPosts = posts;
+    renderAdminPosts(); renderPostList();
+    toast('Entry deleted.');
+  } catch(e) { toast(e.message, true); }
+  setPublishing(false, '');
 }
 
 function clearEditor() {
-  editingId = null;
-  currentPhotoData = null;
-  document.getElementById('post-title').value = '';
-  document.getElementById('post-date').value = new Date().toISOString().slice(0,10);
-  document.getElementById('post-tag').value = '';
-  document.getElementById('post-body').value = '';
+  editingId = null; currentPhotoData = null;
+  ['post-title','post-tag','post-body'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('post-date').value = todayStr();
   document.getElementById('photo-preview').style.display = 'none';
   document.getElementById('photo-preview').src = '';
   document.getElementById('photo-upload-hint').textContent = '📷 Click to choose a photo';
   document.getElementById('remove-photo-btn').style.display = 'none';
   document.getElementById('cancel-edit-btn').style.display = 'none';
+  document.getElementById('publish-status').textContent = '';
 }
 
-// ── Photo ──
+// ── Photos ──
 function handlePhotoSelect(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    currentPhotoData = e.target.result;
-    document.getElementById('photo-preview').src = currentPhotoData;
+  const file = input.files[0]; if (!file) return;
+  compressImage(file).then(data => {
+    currentPhotoData = data;
+    document.getElementById('photo-preview').src = data;
     document.getElementById('photo-preview').style.display = 'block';
     document.getElementById('photo-upload-hint').textContent = '📷 Photo ready';
     document.getElementById('remove-photo-btn').style.display = 'inline-block';
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function removePhoto() {
@@ -789,75 +546,92 @@ function removePhoto() {
   document.getElementById('photo-input').value = '';
 }
 
+function compressImage(file, maxW = 1200, quality = 0.82) {
+  return new Promise(resolve => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', quality));
+    };
+    img.src = url;
+  });
+}
+
 function handleAvatarSelect(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const settings = getSettings();
-    settings.avatar = e.target.result;
-    saveSettings(settings);
+  const file = input.files[0]; if (!file) return;
+  compressImage(file, 300, 0.85).then(data => {
+    const s = getSettings(); s.avatar = data; saveSettings(s);
     document.getElementById('avatar-upload-hint').textContent = '✅ Avatar saved!';
-    toast('Profile photo updated!');
-  };
-  reader.readAsDataURL(file);
+    updateHeroUI(); toast('Profile photo updated!');
+  });
 }
 
 // ── Settings ──
-function loadSettings() {
+function loadSettingsUI() {
   const s = getSettings();
   document.getElementById('setting-blog-name').value = s.blogName || '';
   document.getElementById('setting-bio').value = s.bio || '';
+  const token = getToken();
+  document.getElementById('token-status').textContent = token
+    ? '✅ Token saved — ' + token.slice(0,8) + '…'
+    : '⚠️ No token set yet.';
+  document.getElementById('setting-token').value = '';
+}
+
+function saveToken() {
+  const t = document.getElementById('setting-token').value.trim();
+  if (!t) { toast('Paste your token first', true); return; }
+  localStorage.setItem('cheen_gh_token', t);
+  document.getElementById('token-status').textContent = '✅ Token saved — ' + t.slice(0,8) + '…';
+  document.getElementById('setting-token').value = '';
+  document.getElementById('token-banner').style.display = 'none';
+  toast('Token saved! You can now publish posts 🎉');
 }
 
 function saveBlogName() {
   const s = getSettings();
   s.blogName = document.getElementById('setting-blog-name').value.trim() || "Cheen's Corner";
-  saveSettings(s);
-  document.title = s.blogName;
-  toast('Blog name saved!');
+  saveSettings(s); updateHeroUI(); toast('Blog name saved!');
 }
 
 function saveBio() {
   const s = getSettings();
   s.bio = document.getElementById('setting-bio').value.trim();
-  saveSettings(s);
-  toast('Bio saved!');
+  saveSettings(s); updateHeroUI(); toast('Bio saved!');
 }
 
 function changePassword() {
   const p1 = document.getElementById('setting-new-pass').value;
   const p2 = document.getElementById('setting-confirm-pass').value;
-  if (!p1) { toast('Password cannot be empty'); return; }
-  if (p1 !== p2) { toast('Passwords do not match'); return; }
-  localStorage.setItem(PASS_KEY, p1);
+  if (!p1) { toast('Password cannot be empty', true); return; }
+  if (p1 !== p2) { toast('Passwords do not match', true); return; }
+  localStorage.setItem('cheen_password', p1);
   document.getElementById('setting-new-pass').value = '';
   document.getElementById('setting-confirm-pass').value = '';
   toast('Password updated! 🔐');
 }
 
 // ── Utils ──
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-}
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const todayStr = () => new Date().toISOString().slice(0,10);
+const fmtDate = d => d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '';
 
 let toastTimer;
-function toast(msg) {
+function toast(msg, isError) {
   const el = document.getElementById('toast');
   el.textContent = msg;
+  el.classList.toggle('error', !!isError);
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  toastTimer = setTimeout(() => el.classList.remove('show'), isError ? 4500 : 3000);
 }
 
 // ── Init ──
-renderHome();
+initHome();
 </script>
 </body>
 </html>
