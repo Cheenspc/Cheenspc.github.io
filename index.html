@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cheen's Corner</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg: #FAF8F4; --card: #FFFFFF; --text: #2C2825; --muted: #8C7E74;
@@ -254,17 +255,6 @@
           <div id="token-status" style="font-size:0.82rem;margin-top:8px;color:var(--muted)"></div>
         </div>
         <div class="settings-section">
-          <h3>💬 Comments Token</h3>
-          <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px">
-            Lets friends post comments without logging in. <a href="https://github.com/settings/tokens/new" target="_blank" style="color:var(--accent)">Create a second token</a> — same steps, tick <strong>repo</strong>. This one is stored in your repo so friends can use it.
-          </p>
-          <div class="settings-row">
-            <input type="password" id="setting-comments-token" class="form-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" />
-            <button class="btn-primary" id="save-comments-token-btn" onclick="saveCommentsToken()">Save</button>
-          </div>
-          <div id="comments-token-status" style="font-size:0.82rem;margin-top:8px;color:var(--muted)"></div>
-        </div>
-        <div class="settings-section">
           <h3>Blog Identity</h3>
           <div class="form-group">
             <label class="form-label">Blog name</label>
@@ -308,10 +298,13 @@
 const REPO_OWNER    = 'Cheenspc';
 const REPO_NAME     = 'Cheenspc.github.io';
 const POSTS_FILE    = 'posts.json';
-const COMMENTS_FILE = 'comments.json';
-const CONFIG_FILE   = 'config.json';
 const API_BASE      = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/`;
 const RAW_BASE      = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/`;
+
+// ── Supabase ──
+const SUPABASE_URL  = 'https://koyxcecdnvoshowgpesj.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_VrMBeS1abeKBbsE0y--5Gg_luPBbnKY';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── Storage ──
 const getToken    = () => localStorage.getItem('cheen_gh_token') || '';
@@ -356,8 +349,6 @@ async function ghPut(file, data, token, message) {
 
 // ── State ──
 let allPosts = [];
-let allComments = [];
-let commentsToken = '';
 let adminUnlocked = false;
 let editingId = null;
 let currentPostId = null;
@@ -366,14 +357,8 @@ let currentPhotoData = null;
 // ── Init ──
 async function initHome() {
   updateHeroUI();
-  const [posts, comments, config] = await Promise.all([
-    ghFetch(POSTS_FILE),
-    ghFetch(COMMENTS_FILE),
-    ghFetch(CONFIG_FILE)
-  ]);
-  allPosts    = posts    || [];
-  allComments = (comments && comments.items) ? comments.items : [];
-  commentsToken = (config && config.commentsToken) ? config.commentsToken.split('').reverse().join('') : '';
+  const posts = await ghFetch(POSTS_FILE);
+  allPosts = posts || [];
   renderPostList();
 }
 
@@ -415,11 +400,9 @@ function renderPostList() {
     const preview = p.body ? p.body.slice(0,120).replace(/\n/g,' ') + (p.body.length > 120 ? '…' : '') : '';
     const thumb = p.photo ? `<img class="post-card-thumb" src="${p.photo}" alt="" />` : '';
     const tag = p.tag ? `<span class="tag">${esc(p.tag)}</span>` : '';
-    const commentCount = allComments.filter(c => c.postId === p.id).length;
-    const commentBadge = commentCount > 0 ? `<span style="font-size:0.75rem;color:var(--muted);margin-left:8px">💬 ${commentCount}</span>` : '';
     return `<div class="post-card" onclick="openPost('${p.id}')">
       <div class="post-card-header">
-        <div><div class="post-card-title">${esc(p.title)}</div><div class="post-card-date">${fmtDate(p.date)}${commentBadge}</div></div>
+        <div><div class="post-card-title">${esc(p.title)}</div><div class="post-card-date">${fmtDate(p.date)}</div></div>
         ${thumb}
       </div>
       ${preview ? `<div class="post-card-preview">${esc(preview)}</div>` : ''}
@@ -461,9 +444,12 @@ function editCurrentPost() {
 }
 
 // ── Comments ──
-function renderComments(postId) {
+async function renderComments(postId) {
   const section = document.getElementById('comments-section');
-  const postComments = allComments.filter(c => c.postId === postId).sort((a,b) => new Date(a.date) - new Date(b.date));
+  section.innerHTML = `<div class="comments-section"><div class="comments-title">Notes from friends</div><div style="color:var(--muted);font-size:0.9rem;padding:12px 0">Loading…</div></div>`;
+
+  const { data: postComments, error } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at');
+  if (error) { section.innerHTML = `<div class="comments-section"><p style="color:red">Could not load comments.</p></div>`; return; }
 
   const adminClass = adminUnlocked ? 'admin-active' : '';
   const commentItems = postComments.length > 0
@@ -472,28 +458,24 @@ function renderComments(postId) {
         <div class="comment-header">
           <span class="comment-name">${esc(c.name)}</span>
           <div style="display:flex;align-items:center;gap:8px">
-            <span class="comment-date">${fmtDateTime(c.date)}</span>
+            <span class="comment-date">${fmtDateTime(c.created_at)}</span>
             <button class="comment-delete" onclick="deleteComment('${c.id}')">✕ delete</button>
           </div>
         </div>
-        <div class="comment-text">${esc(c.text)}</div>
+        <div class="comment-text">${esc(c.body)}</div>
       </div>`).join('')
     : `<div class="no-comments">No notes yet — be the first to leave one! 👇</div>`;
-
-  const formOrNotice = commentsToken
-    ? `<div class="comment-form">
-        <h4>Leave a note</h4>
-        <input type="text" id="comment-name-input" placeholder="Your name" maxlength="50" />
-        <textarea id="comment-text-input" placeholder="Write something nice…" maxlength="500"></textarea>
-        <button class="comment-submit" id="comment-submit-btn" onclick="submitComment('${postId}')">Post note</button>
-      </div>`
-    : `<div class="no-comments-token">💬 Comments coming soon — owner is setting them up!</div>`;
 
   section.innerHTML = `
     <div class="comments-section">
       <div class="comments-title">Notes from friends (${postComments.length})</div>
       <div id="comments-list">${commentItems}</div>
-      ${formOrNotice}
+      <div class="comment-form">
+        <h4>Leave a note</h4>
+        <input type="text" id="comment-name-input" placeholder="Your name" maxlength="50" />
+        <textarea id="comment-text-input" placeholder="Write something nice…" maxlength="500"></textarea>
+        <button class="comment-submit" id="comment-submit-btn" onclick="submitComment('${postId}')">Post note</button>
+      </div>
     </div>`;
 }
 
@@ -502,26 +484,22 @@ async function submitComment(postId) {
   const textEl = document.getElementById('comment-text-input');
   const btn    = document.getElementById('comment-submit-btn');
   const name   = nameEl.value.trim();
-  const text   = textEl.value.trim();
+  const body   = textEl.value.trim();
 
   if (!name) { toast('Please enter your name', true); return; }
-  if (!text) { toast('Please write something first', true); return; }
-  if (!commentsToken) { toast('Comments not set up yet', true); return; }
+  if (!body) { toast('Please write something first', true); return; }
 
   btn.disabled = true;
   btn.textContent = 'Posting…';
 
-  try {
-    const newComment = { id: Date.now().toString(), postId, name, text, date: new Date().toISOString() };
-    const updated = { items: [...allComments, newComment] };
-    await ghPut(COMMENTS_FILE, updated, commentsToken, 'Add comment');
-    allComments = updated.items;
+  const { error } = await sb.from('comments').insert({ post_id: postId, name, body });
+  if (error) { toast(error.message, true); }
+  else {
     nameEl.value = '';
     textEl.value = '';
-    renderComments(postId);
-    renderPostList();
     toast('Note posted! 🎉');
-  } catch(e) { toast(e.message, true); }
+    renderComments(postId);
+  }
 
   btn.disabled = false;
   btn.textContent = 'Post note';
@@ -529,14 +507,10 @@ async function submitComment(postId) {
 
 async function deleteComment(commentId) {
   if (!confirm('Delete this comment?')) return;
-  try {
-    const updated = { items: allComments.filter(c => c.id !== commentId) };
-    await ghPut(COMMENTS_FILE, updated, getToken(), 'Delete comment');
-    allComments = updated.items;
-    renderComments(currentPostId);
-    renderPostList();
-    toast('Comment deleted.');
-  } catch(e) { toast(e.message, true); }
+  const { error } = await sb.from('comments').delete().eq('id', commentId);
+  if (error) { toast(error.message, true); return; }
+  renderComments(currentPostId);
+  toast('Comment deleted.');
 }
 
 // ── Admin ──
@@ -583,11 +557,10 @@ function renderAdminPosts() {
   const el = document.getElementById('admin-posts-list');
   if (sorted.length === 0) { el.innerHTML = `<div style="color:var(--muted);text-align:center;padding:40px">No posts yet.</div>`; return; }
   el.innerHTML = sorted.map(p => {
-    const commentCount = allComments.filter(c => c.postId === p.id).length;
     return `<div class="admin-post-row">
       <div style="min-width:0">
         <div class="admin-post-row-title">${esc(p.title)}</div>
-        <div class="admin-post-row-date">${fmtDate(p.date)} · 💬 ${commentCount} note${commentCount !== 1 ? 's' : ''}</div>
+        <div class="admin-post-row-date">${fmtDate(p.date)}</div>
       </div>
       <div class="admin-post-row-actions">
         <button class="btn-sm" onclick="editPost('${p.id}')">Edit</button>
@@ -725,8 +698,6 @@ function loadSettingsUI() {
   const token = getToken();
   document.getElementById('token-status').textContent = token ? '✅ Token saved — ' + token.slice(0,8) + '…' : '⚠️ No token set yet.';
   document.getElementById('setting-token').value = '';
-  document.getElementById('comments-token-status').textContent = commentsToken ? '✅ Comments token active' : '⚠️ Not set — friends cannot comment yet.';
-  document.getElementById('setting-comments-token').value = '';
 }
 
 function saveToken() {
@@ -739,21 +710,6 @@ function saveToken() {
   toast('Admin token saved! 🎉');
 }
 
-async function saveCommentsToken() {
-  const t = document.getElementById('setting-comments-token').value.trim();
-  if (!t) { toast('Paste your comments token first', true); return; }
-  const btn = document.getElementById('save-comments-token-btn');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  try {
-    const config = { commentsToken: t.split('').reverse().join('') };
-    await ghPut(CONFIG_FILE, config, getToken(), 'Update config');
-    commentsToken = t;
-    document.getElementById('comments-token-status').textContent = '✅ Comments token active';
-    document.getElementById('setting-comments-token').value = '';
-    toast('Comments enabled! Friends can now leave notes 💬');
-  } catch(e) { toast(e.message, true); }
-  btn.disabled = false; btn.textContent = 'Save';
-}
 
 function saveBlogName() {
   const s = getSettings();
