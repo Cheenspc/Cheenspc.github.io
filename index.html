@@ -373,7 +373,7 @@ async function initHome() {
   ]);
   allPosts    = posts    || [];
   allComments = (comments && comments.items) ? comments.items : [];
-  commentsToken = (config && config.commentsToken) ? atob(config.commentsToken) : '';
+  try { commentsToken = (config && config.commentsToken) ? atob(config.commentsToken) : ''; } catch(e) { commentsToken = ''; }
   renderPostList();
 }
 
