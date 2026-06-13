@@ -373,7 +373,7 @@ async function initHome() {
   ]);
   allPosts    = posts    || [];
   allComments = (comments && comments.items) ? comments.items : [];
-  commentsToken = (config && config.commentsToken) ? config.commentsToken : '';
+  commentsToken = (config && config.commentsToken) ? atob(config.commentsToken) : '';
   renderPostList();
 }
 
@@ -745,7 +745,7 @@ async function saveCommentsToken() {
   const btn = document.getElementById('save-comments-token-btn');
   btn.disabled = true; btn.textContent = 'Saving…';
   try {
-    const config = { commentsToken: t };
+    const config = { commentsToken: btoa(t) };
     await ghPut(CONFIG_FILE, config, getToken(), 'Update config');
     commentsToken = t;
     document.getElementById('comments-token-status').textContent = '✅ Comments token active';
