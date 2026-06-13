@@ -190,6 +190,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchAdminTab('write',this)">Write New</button>
         <button class="admin-tab" onclick="switchAdminTab('posts',this)">All Posts</button>
+        <button class="admin-tab" onclick="switchAdminTab('comments',this)">Comments</button>
         <button class="admin-tab" onclick="switchAdminTab('settings',this)">Settings</button>
       </div>
 
@@ -241,6 +242,11 @@
       <!-- Posts tab -->
       <div id="admin-tab-posts" class="admin-tab-content" style="display:none">
         <div id="admin-posts-list"></div>
+      </div>
+
+      <!-- Comments tab -->
+      <div id="admin-tab-comments" class="admin-tab-content" style="display:none">
+        <div id="admin-comments-list"></div>
       </div>
 
       <!-- Settings tab -->
@@ -310,7 +316,11 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const getToken    = () => localStorage.getItem('cheen_gh_token') || '';
 const getPassword = () => localStorage.getItem('cheen_password') || 'hello123';
 const getSettings = () => { try { return JSON.parse(localStorage.getItem('cheen_settings')) || {}; } catch { return {}; } };
-const saveSettings = s => localStorage.setItem('cheen_settings', JSON.stringify(s));
+const saveSettings = s => {
+  localStorage.setItem('cheen_settings', JSON.stringify(s));
+  const rows = ['blogName','bio','avatar'].map(k => ({ key: k, value: s[k] || '' }));
+  sb.from('settings').upsert(rows).then(() => {});
+};
 
 // ── GitHub helpers ──
 async function ghFetch(file) {
@@ -360,6 +370,7 @@ async function initHome() {
   const posts = await ghFetch(POSTS_FILE);
   allPosts = posts || [];
   renderPostList();
+  syncSettingsFromSupabase();
 }
 
 // ── Views ──
@@ -549,6 +560,7 @@ function switchAdminTab(name, btn) {
   document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
   document.getElementById('admin-tab-' + name).style.display = 'block';
   if (name === 'posts') renderAdminPosts();
+  if (name === 'comments') renderAdminComments();
   if (name === 'settings') loadSettingsUI();
 }
 
@@ -728,9 +740,59 @@ function changePassword() {
   if (!p1) { toast('Password cannot be empty', true); return; }
   if (p1 !== p2) { toast('Passwords do not match', true); return; }
   localStorage.setItem('cheen_password', p1);
+  sb.from('settings').upsert([{ key: 'password', value: p1 }]).then(() => {});
   document.getElementById('setting-new-pass').value = '';
   document.getElementById('setting-confirm-pass').value = '';
   toast('Password updated! 🔐');
+}
+
+async function renderAdminComments() {
+  const el = document.getElementById('admin-comments-list');
+  el.innerHTML = '<div style="color:var(--muted);padding:20px">Loading…</div>';
+  const { data, error } = await sb.from('comments').select('*').order('created_at', { ascending: false });
+  if (error) { el.innerHTML = `<div style="color:red;padding:20px">${error.message}</div>`; return; }
+  if (!data || data.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:40px">No comments yet.</div>';
+    return;
+  }
+  el.innerHTML = data.map(c => {
+    const post = allPosts.find(p => p.id === c.post_id);
+    const postTitle = post ? esc(post.title) : '(unknown post)';
+    const preview = c.body.length > 60 ? c.body.slice(0, 60) + '…' : c.body;
+    return `<div class="admin-post-row">
+      <div style="min-width:0">
+        <div class="admin-post-row-title">${esc(c.name)}: ${esc(preview)}</div>
+        <div class="admin-post-row-date">on "${postTitle}" · ${fmtDateTime(c.created_at)}</div>
+      </div>
+      <div class="admin-post-row-actions">
+        <button class="btn-sm danger" onclick="deleteCommentAdmin('${c.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function deleteCommentAdmin(id) {
+  if (!confirm('Delete this comment?')) return;
+  const { error } = await sb.from('comments').delete().eq('id', id);
+  if (error) { toast(error.message, true); return; }
+  toast('Comment deleted.');
+  renderAdminComments();
+}
+
+async function syncSettingsFromSupabase() {
+  try {
+    const { data } = await sb.from('settings').select('*');
+    if (!data || data.length === 0) return;
+    const remote = {};
+    data.forEach(row => { remote[row.key] = row.value; });
+    const local = getSettings();
+    if (remote.blogName !== undefined) local.blogName = remote.blogName;
+    if (remote.bio !== undefined) local.bio = remote.bio;
+    if (remote.avatar !== undefined) local.avatar = remote.avatar;
+    localStorage.setItem('cheen_settings', JSON.stringify(local));
+    if (remote.password) localStorage.setItem('cheen_password', remote.password);
+    updateHeroUI();
+  } catch(e) { console.warn('Settings sync:', e); }
 }
 
 // ── Utils ──
